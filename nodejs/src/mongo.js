@@ -40,7 +40,7 @@ var NotFLIXSchema = new Schema({
   Username: String,
   TitleID: Number,
   UserAction: String,
-  _id: Number,
+  DateTime : { type : Date, default: Date.now },
   PointofInteraction: String,
   TypeofInteraction: String
 });
