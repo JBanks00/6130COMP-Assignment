@@ -35,19 +35,22 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var Schema = mongoose.Schema;
 
-var stockSchema = new Schema({
+var NIXotFLSchema = new Schema({
+  AccountID: Number,
+  Username: String,
+  TitleID: Number,
+  UserAction: String,
   _id: Number,
-  item: String,
-  price: Number,
-  quantity: Number
+  PointofInteraction: String,
+  TypeofInteraction: String
 });
 
-var stockModel = mongoose.model('Stock', stockSchema, 'stock');
+var NotFLIXModel = mongoose.model('Items', NIXotFLSchema, 'items');
 
 
 
 app.get('/', (req, res) => {
-  stockModel.find({},'item price quantity lastName', (err, stock) => {
+  NotFLIXModel.find({},'item', (err, stock) => {
     if(err) return handleError(err);
     res.send(JSON.stringify(stock))
   }) 
