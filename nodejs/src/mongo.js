@@ -35,7 +35,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var Schema = mongoose.Schema;
 
-var NIXotFLSchema = new Schema({
+var NotFLIXSchema = new Schema({
   AccountID: Number,
   Username: String,
   TitleID: Number,
