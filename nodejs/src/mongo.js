@@ -1,12 +1,20 @@
+//Object data modelling library for mongo
 const mongoose = require('mongoose');
 
+//Mongo db client library
+//const MongoClient  = require('mongodb');
+
+//Express web service library
 const express = require('express')
 
+//used to parse the server response from json to object.
 const bodyParser = require('body-parser');
 
+//instance of express and port to use for inbound connections.
 const app = express()
 const port = 3000
 
+//connection string listing the mongo servers. This is an alternative to using a load balancer. THIS SHOULD BE DISCUSSED IN YOUR ASSIGNMENT.
 const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/sweetShopDB?replicaSet=rs0';
 
 setInterval(function() {
@@ -15,31 +23,33 @@ setInterval(function() {
 
 }, 3000);
 
+//tell express to use the body parser. Note - This function was built into express but then moved to a seperate package.
 app.use(bodyParser.json());
 
+//connect to the cluster
 mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true});
+
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var Schema = mongoose.Schema;
 
-var NotFLIX_Schema = new Schema({
-  AccountID: Number,
-  Username: String,
-  TitleID: Number,
-  UserAction: String,
-  DateTime: Date,
-  PointofInteraction: String,
-  TypeofInteraction: String
+var stockSchema = new Schema({
+  _id: Number,
+  item: String,
+  price: Number,
+  quantity: Number
 });
 
-var NotFLIX_Model = mongoose.model('Items', NotFLIX_Schema, 'items');
+var stockModel = mongoose.model('Stock', stockSchema, 'stock');
+
+
 
 app.get('/', (req, res) => {
-  NotFLIX_Model.find({},'Item', (err, item) => {
+  stockModel.find({},'item price quantity lastName', (err, stock) => {
     if(err) return handleError(err);
-    res.send(JSON.stringify(item))
+    res.send(JSON.stringify(stock))
   }) 
 })
 
@@ -59,7 +69,7 @@ app.delete('/',  (req, res) => {
   res.send('Got a DELETE request at /')
 })
 
+//bind the express web service to the port specified
 app.listen(port, () => {
  console.log(`Express Application listening at port ` + port)
 })
-
