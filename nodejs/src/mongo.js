@@ -15,7 +15,7 @@ const app = express()
 const port = 3000
 
 //connection string listing the mongo servers. This is an alternative to using a load balancer. THIS SHOULD BE DISCUSSED IN YOUR ASSIGNMENT.
-const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/sweetShopDB?replicaSet=rs0';
+const connectionString = 'mongodb://localmongo1:27017/NotFLIXDB?replicaSet=rs0';
 
 setInterval(function() {
 
@@ -40,12 +40,12 @@ var NotFLIXSchema = new Schema({
   Username: String,
   TitleID: Number,
   UserAction: String,
-  DateTime : { type : Date, default: Date.now },
+  DateTime : String,
   PointofInteraction: String,
   TypeofInteraction: String
 });
 
-var NotFLIXModel = mongoose.model('Items', NIXotFLSchema, 'items');
+var NotFLIXModel = mongoose.model('Items', NotFLIXSchema, 'items');
 
 
 
