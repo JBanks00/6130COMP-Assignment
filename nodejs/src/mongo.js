@@ -15,7 +15,7 @@ const app = express()
 const port = 3000
 
 //connection string listing the mongo servers. This is an alternative to using a load balancer. THIS SHOULD BE DISCUSSED IN YOUR ASSIGNMENT.
-const connectionString = 'mongodb://localmongo1:27017/NotFLIXDB?replicaSet=rs0';
+const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/NotFLIXDB?replicaSet=rs0';
 
 setInterval(function() {
 
