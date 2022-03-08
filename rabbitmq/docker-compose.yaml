@@ -1,59 +1,52 @@
-version: "3.3"
+version: '2'
+
 services:
-  rabbitmq-stats:
-    image: bitnami/rabbitmq:3.8.14
-    container_name: rabbitmq-stats
-    volumes:
-      - rabbitmq-stats-data:/bitnami
-    environment:
-      - RABBITMQ_NODE_TYPE=stats
-      - RABBITMQ_NODE_NAME=rabbitmq@rabbitmq-stats
-      - RABBITMQ_ERL_COOKIE=%U^76CcK
-    ports:
-      - "40001:15672"
-
-  rabbitmq-queue-one:
-    image: bitnami/rabbitmq:3.8.14
-    container_name: rabbitmq-queue-one
-    depends_on:
-      - rabbitmq-stats
-    volumes:
-      - rabbitmq-queue-one-data:/bitnami
-    environment:
-      - RABBITMQ_NODE_TYPE=queue-disc
-      - RABBITMQ_NODE_NAME=rabbitmq@rabbitmq-queue-one
-      - RABBITMQ_CLUSTER_NODE_NAME=rabbitmq@rabbitmq-stats
-      - RABBITMQ_ERL_COOKIE=%U^76CcK
-
-  rabbitmq-queue-two:
-    image: bitnami/rabbitmq:3.8.14
-    container_name: rabbitmq-queue-two
-    depends_on:
-      - rabbitmq-stats
-    volumes:
-      - rabbitmq-queue-two-data:/bitnami
-    environment:
-      - RABBITMQ_NODE_TYPE=queue-disc
-      - RABBITMQ_NODE_NAME=rabbitmq@rabbitmq-queue-two
-      - RABBITMQ_CLUSTER_NODE_NAME=rabbitmq@rabbitmq-stats
-      - RABBITMQ_ERL_COOKIE=%U^76CcK
-  
-  haproxy:
+ stats:
+  image: bitnami/rabbitmq
+  environment:
+    - RABBITMQ_NODE_TYPE=stats
+    - RABBITMQ_NODE_NAME=rabbit@stats
+    - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+  volumes:
+    - 'rabbitmqstats_data:/bitnami'
+ queue-disc1:
+  image: bitnami/rabbitmq
+  environment:
+    - RABBITMQ_NODE_TYPE=queue-disc
+    - RABBITMQ_NODE_NAME=rabbit@queue-disc1
+    - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
+    - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+  volumes:
+    - 'rabbitmqdisc1_data:/bitnami'
+  depends_on:
+    - stats
+ queue-ram1:
+  image: bitnami/rabbitmq
+  environment:
+    - RABBITMQ_NODE_TYPE=queue-ram
+    - RABBITMQ_NODE_NAME=rabbit@queue-ram1
+    - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
+    - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+  volumes:
+    - 'rabbitmqram1_data:/bitnami'
+  depends_on:
+    - stats
+ haproxy:
   image: haproxy:1.7
   volumes:
     - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
   depends_on:
-    - rabbitmq-stats
-    - rabbitmq-queue-one
-    - rabbitmq-queue-two
+    - stats
+    - queue-disc1
+    - queue-ram1
   ports:
     - 15672:15672
     - 5672:5672
-
+    
 volumes:
-  rabbitmq-stats-data:
-    driver: local
-  rabbitmq-queue-one-data:
-    driver: local
-  rabbitmq-queue-two-data:
-    driver: local
+ rabbitmqstats_data:
+  driver: local
+ rabbitmqdisc1_data:
+  driver: local
+ rabbitmqram1_data:
+  driver: local
