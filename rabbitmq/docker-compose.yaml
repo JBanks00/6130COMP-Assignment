@@ -38,19 +38,18 @@ services:
       - RABBITMQ_NODE_NAME=rabbitmq@rabbitmq-queue-two
       - RABBITMQ_CLUSTER_NODE_NAME=rabbitmq@rabbitmq-stats
       - RABBITMQ_ERL_COOKIE=%U^76CcK
-
-haproxy:
- image: haproxy:1.7
- volumes:
-  - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
- depends_on:
-  - rabbitmq-stats
-  - rabbitmq-queue-one
-  - rabbitmq-queue-two
- ports:
-  - 15672:15672
-  - 5672:5672
-
+  
+  haproxy:
+  image: haproxy:1.7
+  volumes:
+    - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+  depends_on:
+    - rabbitmq-stats
+    - rabbitmq-queue-one
+    - rabbitmq-queue-two
+  ports:
+    - 15672:15672
+    - 5672:5672
 
 volumes:
   rabbitmq-stats-data:
