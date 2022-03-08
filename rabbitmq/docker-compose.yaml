@@ -1,6 +1,5 @@
 version: "3.3"
 services:
-      # Message tier
   rabbitmq-stats:
     image: bitnami/rabbitmq:3.8.14
     container_name: rabbitmq-stats
