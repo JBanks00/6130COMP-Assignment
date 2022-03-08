@@ -38,7 +38,14 @@ services:
     build: ./nodejs
     ports:
       - "81:3000"
-<<<<<<< HEAD
+  node2:
+    build: ./nodejs
+    ports:
+      - "82:3000"
+  node3:
+    build: ./nodejs
+    ports:
+      - "83:3000"
   rabbitmq-stats:
     image: bitnami/rabbitmq:3.8.14
     container_name: rabbitmq-stats
@@ -94,13 +101,3 @@ volumes:
     driver: local
   rabbitmq-queue-two-data:
     driver: local
-=======
-  node2:
-    build: ./nodejs
-    ports:
-      - "82:3000"
-  node3:
-    build: ./nodejs
-    ports:
-      - "83:3000"
->>>>>>> a3a0499d70deaa89ad079d5f52b5736157c398e6
