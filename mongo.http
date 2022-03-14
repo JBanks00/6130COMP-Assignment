@@ -1,1 +1,28 @@
 GET https://192.168.56.10:81
+
+###
+
+POST https://192.168.56.10:81 HTTP/1.1
+content-type: application/json
+
+{
+    "Username": "TestUser"
+}
+
+###
+
+DELETE https://192.168.56.10:81 HTTP/1.1
+content-type: application/json
+
+{
+    "Username": "TestUser"
+}
+
+###
+
+PUT https://192.168.56.10:81 HTTP/1.1
+content-type: application/json
+
+{
+    "Username": "TestUser"
+}
