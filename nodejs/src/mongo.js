@@ -1,9 +1,7 @@
 //Object data modelling library for mongo
 
 //Subscirber nodes MongoDB 
-var amqp = require('amqplib/callback_api');
-
-amqp.connect('amqp://test:test@192.168.56.10', function(error0, connection) {
+amqp.connect('mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/NotFLIXDB?replicaSet=rs0', function(error0, connection) {
       if (error0) {
               throw error0;
             }
