@@ -1,40 +1,7 @@
 //Object data modelling library for mongo
 
 //Subscirber nodes MongoDB 
-amqp.connect('mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/NotFLIXDB?replicaSet=rs0', function(error0, connection) {
-      if (error0) {
-              throw error0;
-            }
-      connection.createChannel(function(error1, channel) {
-              if (error1) {
-                        throw error1;
-                      }
-              var exchange = 'logs';
-
-              channel.assertExchange(exchange, 'fanout', {
-                        durable: false
-                      });
-
-              channel.assertQueue('', {
-                        exclusive: true
-                      }, function(error2, q) {
-                                if (error2) {
-                                            throw error2;
-                                          }
-                                console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
-                                channel.bindQueue(q.queue, exchange, '');
-
-                                channel.consume(q.queue, function(msg) {
-                                            if(msg.content) {
-                                                            console.log(" [x] %s", msg.content.toString());
-                                                          }
-                                          }, {
-                                                      noAck: true
-                                                    });
-                              });
-            });
-});
-
+    
 //Publisher node interval of 5 seconds
 
 const mongoose = require('mongoose');
@@ -57,7 +24,34 @@ const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmon
 
 setInterval(function() {
 
-  console.log(`Intervals are used to fire a function for the lifetime of an application.`);
+  connection.createChannel(function(error1, channel) {
+    if (error1) {
+              throw error1;
+            }
+    var exchange = 'logs';
+
+    channel.assertExchange(exchange, 'fanout', {
+              durable: false
+            });
+
+    channel.assertQueue('', {
+              exclusive: true
+            }, function(error2, q) {
+                      if (error2) {
+                                  throw error2;
+                                }
+                      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
+                      channel.bindQueue(q.queue, exchange, '');
+
+                      channel.consume(q.queue, function(msg) {
+                                  if(msg.content) {
+                                                  console.log(" [x] %s", msg.content.toString());
+                                                }
+                                }, {
+                                            noAck: true
+                                          });
+                    });
+  });
 
 }, 3000);
 
