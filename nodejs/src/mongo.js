@@ -12,6 +12,7 @@ toSend = {"hostname" : myhostname, "status": "alive","nodeID":nodeID} ;
 
 //Publish a Status Message 
 setInterval(function() {
+  console.log(`Intervals are used to fire a function for the lifetime of an application.`);
   console.log("sending alive");
   sock.send(["status", JSON.stringify(toSend)]);
 }, 500);
@@ -66,11 +67,11 @@ const port = 3000
 //connection string listing the mongo servers. This is an alternative to using a load balancer. THIS SHOULD BE DISCUSSED IN YOUR ASSIGNMENT.
 const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/NotFLIXDB?replicaSet=rs0';
 
-setInterval(function() {
+//setInterval(function() {
 
-  console.log(`Intervals are used to fire a function for the lifetime of an application.`);
+ // console.log(`Intervals are used to fire a function for the lifetime of an application.`);
 
-}, 3000);
+//}, 3000);
 
 //tell express to use the body parser. Note - This function was built into express but then moved to a seperate package.
 app.use(bodyParser.json());
