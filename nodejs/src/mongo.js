@@ -1,23 +1,21 @@
-//Object data modelling library for mongo
-
 //Subscirber Nodes MongoDB 
 systemLeader = 0
 
-//Get the hostname of the node
+//Get Hostname
 var os = require("os");
 var myhostname = os.hostname();
 
+//Generate Random Number and Message
 var nodeID = Math.floor(Math.random() * (100 - 1 + 1) + 1);
 toSend = {"hostname" : myhostname, "status": "alive","nodeID":nodeID} ;
 
-//based on the interval publish a status message 
+//Display Status Message
 setInterval(function() {
   console.log("sending alive");
   sock.send(["status", JSON.stringify(toSend)]);
 }, 500);
 
-
-//check if leader
+//Check for Leader
 setInterval(function() {
   console.log(JSON.stringify(nodes));
   leader = 1;
