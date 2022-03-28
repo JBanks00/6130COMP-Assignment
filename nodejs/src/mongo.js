@@ -1,6 +1,23 @@
 //Object data modelling library for mongo
 
-//Subscirber nodes MongoDB 
+//Subscirber Nodes MongoDB 
+
+//Hostname of the Node
+var os = require("os");
+var myhostname = os.hostname();
+
+//Message To Send
+var nodeID = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+toSend = {"hostname" : myhostname, "status": "alive","nodeID":nodeID} ;
+
+//Publish a Status Message 
+setInterval(function() {
+  console.log("sending alive");
+  sock.send(["status", JSON.stringify(toSend)]);
+}, 500);
+
+
+//Publisher Node
 
 db.open(function(err) {
     if (err) throw err;
