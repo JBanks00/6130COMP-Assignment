@@ -2,6 +2,7 @@
 systemLeader = 0
 
 //Get Hostname
+var amqp = require('amqplib/callback_api');
 var os = require("os");
 var myhostname = os.hostname();
 
