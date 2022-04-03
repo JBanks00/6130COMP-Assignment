@@ -2,7 +2,7 @@
 var systemLeader = false;
 
 //Add Required Libraries
-var amqp = require('amqplib/callback_api');
+const amqp = require('amqplib/callback_api');
 const mongoose = require('mongoose');
 const express = require('express')
 
