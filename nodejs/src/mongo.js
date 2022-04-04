@@ -40,7 +40,10 @@ var NotFLIXSchema = new Schema({
 var NotFLIXModel = mongoose.model('Items', NotFLIXSchema, 'items');
 
 //Each Node Sends an Alive Message 
-amqp.connect('amqp://test:test@192.168.56.10', function(error0, connection) {
+
+
+setInterval(function() {
+amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, connection) {
 
     //if connection failed throw error
     if (error0) {
@@ -69,10 +72,10 @@ amqp.connect('amqp://test:test@192.168.56.10', function(error0, connection) {
          connection.close();
      }, 500);
 });
-
+}, 5000);
 
     //Nodes Subsrcibe to Message Queue
-    amqp.connect('amqp://test:test@192.168.56.10', function(error0, connection) {
+    amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, connection) {
       if (error0) {
               throw error0;
             }
@@ -104,5 +107,4 @@ amqp.connect('amqp://test:test@192.168.56.10', function(error0, connection) {
                                                     });
                               });
             });
-});
 });
