@@ -1,32 +1,89 @@
-//System Leader Boolean Value
-var systemLeader = false;
+//Object data modelling library for mongo
 
-//Add Required Libraries
-const amqp = require('amqplib/callback_api');
-const mongoose = require('mongoose');
-const express = require('express')
+//Subscirber Nodes MongoDB 
 
-//Get Hostname
-const os = require("os");
+//Hostname of the Node
+var os = require("os");
 var myhostname = os.hostname();
 
-//Generate Random Number
+//Message To Send
 var nodeID = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+toSend = {"hostname" : myhostname, "status": "alive","nodeID":nodeID} ;
 
-//Connection String to Connect to Mongo Servers
-const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/NotFLIXDB?replicaSet=rs0';
+//Publish a Status Message 
+setInterval(function() {
+  console.log("sending alive");
+  sock.send(["status", JSON.stringify(toSend)]);
+}, 500);
 
-//Connect to Cluster
-app.use(bodyParser.json());
-mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true});
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-var Schema = mongoose.Schema;
+
+//Publisher Node
+
+db.open(function(err) {
+    if (err) throw err;
+
+    db.collection('messages', function(err, collection) {
+        if (err) throw err;
+
+        var latest = collection.find({}).sort({ $natural: -1 }).limit(1);
+
+        latest.nextObject(function(err, doc) {
+            if (err) throw err;
+
+            var query = { _id: { $gt: doc._id }};
+            
+            var options = { tailable: true, awaitdata: true, numberOfRetries: -1 };
+            var cursor = collection.find(query, options).sort({ $natural: 1 });
+
+            (function next() {
+                cursor.nextObject(function(err, message) {
+                    if (err) throw err;
+                    console.log(message);
+                    next();
+                });
+            })();
+        });
+    });
+});
+
+//Publisher node interval of 5 seconds
+
+const mongoose = require('mongoose');
+
+//Mongo db client library
+//const MongoClient  = require('mongodb');
+
+//Express web service library
+const express = require('express')
 
 //used to parse the server response from json to object.
 const bodyParser = require('body-parser');
 
-//Creation of Schema for NotFLIX
+//instance of express and port to use for inbound connections.
+const app = express()
+const port = 3000
+
+//connection string listing the mongo servers. This is an alternative to using a load balancer. THIS SHOULD BE DISCUSSED IN YOUR ASSIGNMENT.
+const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/NotFLIXDB?replicaSet=rs0';
+
+setInterval(function() {
+
+  console.log(`Intervals are used to fire a function for the lifetime of an application.`);
+
+}, 3000);
+
+//tell express to use the body parser. Note - This function was built into express but then moved to a seperate package.
+app.use(bodyParser.json());
+
+//connect to the cluster
+mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true});
+
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+var Schema = mongoose.Schema;
+
 var NotFLIXSchema = new Schema({
   AccountID: Number,
   Username: String,
@@ -39,72 +96,30 @@ var NotFLIXSchema = new Schema({
 
 var NotFLIXModel = mongoose.model('Items', NotFLIXSchema, 'items');
 
-//Each Node Sends an Alive Message 
+app.get('/', (req, res) => {
+  NotFLIXModel.find({},'item', (err, stock) => {
+    if(err) return handleError(err);
+    res.send(JSON.stringify(stock))
+  }) 
+})
 
+app.post('/',  (req, res) => {
+  var awesome_instance = new SomeModel(req.body);
+  awesome_instance.save(function (err) {
+  if (err) res.send('Error');
+    res.send(JSON.stringify(req.body))
+  });
+})
 
-setInterval(function() {
-amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, connection) {
+app.put('/',  (req, res) => {
+  res.send('Got a PUT request at /')
+})
 
-    //if connection failed throw error
-    if (error0) {
-        throw error0;
-    }
+app.delete('/',  (req, res) => {
+  res.send('Got a DELETE request at /')
+})
 
-    //create a channel if connected and send hello world to the logs Q
-    connection.createChannel(function(error1, channel) {
-        if (error1) {
-            throw error1;
-        }
-        var exchange = 'logs';
-        var msg =  'Hello World!';
-
-        channel.assertExchange(exchange, 'fanout', {
-                durable: false
-        });
-        
-        channel.publish(exchange, '', Buffer.from(msg));
-        console.log(" [x] Sent %s", msg);
-     });
-
-           
-     //in 1/2 a second force close the connection
-     setTimeout(function() {
-         connection.close();
-     }, 500);
-});
-}, 5000);
-
-    //Nodes Subsrcibe to Message Queue
-    amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, connection) {
-      if (error0) {
-              throw error0;
-            }
-      connection.createChannel(function(error1, channel) {
-              if (error1) {
-                        throw error1;
-                      }
-              var exchange = 'logs';
-
-              channel.assertExchange(exchange, 'fanout', {
-                        durable: false
-                      });
-
-              channel.assertQueue('', {
-                        exclusive: true
-                      }, function(error2, q) {
-                                if (error2) {
-                                            throw error2;
-                                          }
-                                console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
-                                channel.bindQueue(q.queue, exchange, '');
-
-                                channel.consume(q.queue, function(msg) {
-                                            if(msg.content) {
-                                                            console.log(" [x] %s", msg.content.toString());
-                                                          }
-                                          }, {
-                                                      noAck: true
-                                                    });
-                              });
-            });
-});
+//bind the express web service to the port specified
+app.listen(port, () => {
+ console.log(`Express Application listening at port ` + port)
+})
