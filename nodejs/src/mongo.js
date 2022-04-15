@@ -5,6 +5,9 @@ var systemLeader = false;
 const amqp = require('amqplib/callback_api');
 const mongoose = require('mongoose');
 const express = require('express')
+const app = express();
+
+app.get("/",(req,res) => res.send("Hello World !"));
 
 //Get Hostname
 const os = require("os");
