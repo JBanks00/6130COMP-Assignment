@@ -1,28 +1,20 @@
-GET https://192.168.56.10:81
+use('notFlixDB');
 
-###
+db.interaction.drop();
 
-POST https://192.168.56.10:81 HTTP/1.1
-content-type: application/json
+db.interaction.insertMany([
+  { ''AccountID': 1, 'Username': 'JBanks00', 'TitleID': 001, 'UserAction': 'Play', 'DateTime': '2021-22-05', 'PointofInteraction': '00:25:30', 'TypeofInteraction': 'Play'   }
+]);
 
-{
-    "Username": "TestUser"
-}
-
-###
-
-DELETE https://192.168.56.10:81 HTTP/1.1
-content-type: application/json
-
-{
-    "Username": "TestUser"
-}
-
-###
-
-PUT https://192.168.56.10:81 HTTP/1.1
-content-type: application/json
-
-{
-    "Username": "TestUser"
-}
+use('notFlixDB');
+db.getCollection('interaction')
+ .find(
+ {
+ },
+ {
+ accountID: 1
+ }
+ )
+ .sort({
+ accountID: 1
+ });
