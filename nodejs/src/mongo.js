@@ -1,5 +1,4 @@
 //Add Required Libraries
-var amqp = require('amqplib/callback_api');
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
@@ -44,6 +43,7 @@ var NotFLIXModel = mongoose.model('Items', NotFLIXSchema, 'items');
 
 //Each Node Sends an Alive Message 
 
+var amqp = require('amqplib/callback_api');
 
 setInterval(function() {
 amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, connection) {
