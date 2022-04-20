@@ -1,39 +1,33 @@
-//Object data modelling library for mongo
+//Add Required Libraries
+var amqp = require('amqplib/callback_api');
 const mongoose = require('mongoose');
+const express = require('express');
+const app = express();
 
-//Mongo db client library
-//const MongoClient  = require('mongodb');
+app.get("/",(req,res) => res.send("Hello World !"));
 
-//Express web service library
-const express = require('express')
+//System Leader Boolean Value
+var systemLeader = false;
+
+//Get Hostname
+const os = require("os");
+var myhostname = os.hostname();
+
+//Generate Random Number
+var nodeID = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+
+//Connection String to Connect to Mongo Servers
+const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/NotFLIXDB?replicaSet=rs0';
+
+//Connect to Cluster
+app.use(bodyParser.json());
+mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+var Schema = mongoose.Schema;
 
 //used to parse the server response from json to object.
 const bodyParser = require('body-parser');
-
-//instance of express and port to use for inbound connections.
-const app = express()
-const port = 3000
-
-//connection string listing the mongo servers. This is an alternative to using a load balancer.
-const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/NotFLIXDB?replicaSet=rs0';
-
-setInterval(function() {
-
-  console.log(`Intervals are used to fire a function for the lifetime of an application.`);
-
-}, 3000);
-
-//tell express to use the body parser. Note - This function was built into express but then moved to a seperate package.
-app.use(bodyParser.json());
-
-//connect to the cluster
-mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true});
-
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-var Schema = mongoose.Schema;
 
 //Creation of Schema for NotFLIX
 var NotFLIXSchema = new Schema({
@@ -50,7 +44,6 @@ var NotFLIXModel = mongoose.model('Items', NotFLIXSchema, 'items');
 
 //Each Node Sends an Alive Message 
 
-var amqp = require('amqplib/callback_api');
 
 setInterval(function() {
 amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, connection) {
