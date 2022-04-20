@@ -1,5 +1,5 @@
 //Add Required Libraries
-const amqp = require('amqplib/callback_api');
+var amqp = require('amqplib/callback_api');
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
