@@ -1,7 +1,7 @@
 //Add Required Libraries
 const amqp = require('amqplib/callback_api');
 const mongoose = require('mongoose');
-const express = require('express')
+const express = require('express');
 const app = express();
 
 app.get("/",(req,res) => res.send("Hello World !"));
