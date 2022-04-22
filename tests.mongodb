@@ -3,7 +3,7 @@ use('notFlixDB');
 db.interaction.drop();
 
 db.interaction.insertMany([
-  { ''AccountID': 1, 'Username': 'JBanks00', 'TitleID': 001, 'UserAction': 'Play', 'DateTime': '2021-22-05', 'PointofInteraction': '00:25:30', 'TypeofInteraction': 'Play'   }
+  { 'AccountID': 1, 'Username': 'JBanks00', 'TitleID': 001, 'UserAction': 'Play', 'DateTime': '2021-22-05', 'PointofInteraction': '00:25:30', 'TypeofInteraction': 'Play' },
 ]);
 
 use('notFlixDB');
