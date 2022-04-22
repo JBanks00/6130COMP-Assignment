@@ -7,22 +7,22 @@ To start the solution, once the folder exists on the VM being used to test, use 
 
 <b>cd 613COMP-Assignment</b>
 
-This will change the  directory into the solution folder. From here the solution can be started with the following command:
+This will change the directory into the solution folder. From here the solution can be started with the following command:
 
 <b>sudo docker-compose up</b>
 
-Give the soution time to boot up, afterwards use "Ctrl+Z" to  enter the terminal again. From here the  running containers can be seen by running the command:
+Give the solution time to boot up, afterwards use "Ctrl+Z" to enter the terminal again. From here the  running containers can be seen by running the command:
 
 <b>sudo docker container ls</b>
 
 <h2>MongoDB:</h2>
-A connection string is used to connect to the NotFLIX MongoDB, after a connetion has been established tests can be ran to query the database. <i>(Initally the interactions could be ran from a script, however there is a hostname error and this is another suitable option)</i>
+A connection string is used to connect to the NotFLIX MongoDB, after a connection has been established tests can be run to query the database. <i>(Initally the interactions could be run from a script, however there is a hostname error and this is another suitable option)</i>
 
 <br>From the terminal, which is a continuation from the previous steps as solution needs to be running, run the command:
 
 <b>docker exec -it mongoContainer mongo</b>  <i>- where mongoContainer is the localmongo1 containerID</i>
 
-This will change the terminal into the MongoDB container where the neccassary commands can be ran to save and access data from the database. The first command is to use the correct database and is acoomplished by running:
+This will change the terminal into the MongoDB container where the necessary commands can be run to save and access data from the database. The first command is to use the correct database and is accomplished by running:
 
 <b>use notFlixDB;</b>
 
@@ -53,8 +53,9 @@ To exit from this container terminal use <b>Ctrl+C</b>, which will take you back
 <h2>Leader Election:</h2>
 In its current state the solution will elect a leader node based upon the highest randomly generated value that each node has.
 
-<br>The image below shows a localmongo node being elected as a leader, by changing its state form SECONDARY to PRIMARY. It does this by comparing a randomly generated number, that has been generated for each localmongo node, with the other nodes. In the case of the screenshot below this number is <b>"10"</B>, which is bigger than the other two nodes numbers and therefore allowing the node to become the PRIMARY/leader node.
+<br>The image below shows a localmongo node being elected as a leader, by changing its state from SECONDARY to PRIMARY. It does this by comparing a randomly generated number, that has been generated for each localmongo node, with the other nodes. In the case of the screenshot below this number is <b>"10"</B>, which is bigger than the other two nodes numbers and therefore allowing the node to become the PRIMARY/leader node.
 <img src="https://user-images.githubusercontent.com/46931166/164703121-401f27b9-ef2a-4608-97c9-a558a3a1cf7d.png">
 To find this in the live demo you may need to scroll up past any rabbitmq messages, the output that will show the lead will begin with either <b>localmongo1, localmonogo2 or localmongo3.</b> It will show a message similar to the screenshot, however the random number may be different which means the leader node will also be different.
 
 <h2>Stopping the Solution:</h2>
+To stop the solution use <b>Ctrl+C</b> when <b>sudo docker-compose up</b> has been run. Running this once will perform a graceful shutdown, if you enter twice it will force-kill the solution.
