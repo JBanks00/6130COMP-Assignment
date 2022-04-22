@@ -65,6 +65,15 @@ amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, 
                 durable: false
         });
         
+        channel.assertQueue('', {
+          exclusive: true
+        }, function (error2, q) {
+          if (error2) {
+            throw error2;
+          }
+        console.log("Waiting for messages in %s", q.queue);
+        channel.bindQueue(q.queue, exchange, '');
+        channel.consume(q.queue, function (msg) {
         channel.publish(exchange, '', Buffer.from(msg));
         console.log(" [x] Sent %s", msg);
      });
