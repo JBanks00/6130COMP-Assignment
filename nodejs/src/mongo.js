@@ -53,13 +53,13 @@ amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, 
         throw error0;
     }
 
-    //create a channel if connected and send hello world to the logs Q
+    //create a channel if connected and send I am alive to the logs Q
     connection.createChannel(function(error1, channel) {
         if (error1) {
             throw error1;
         }
         var exchange = 'logs';
-        var msg =  'Hello World!';
+        var msg =  'I am alive';
 
         channel.assertExchange(exchange, 'fanout', {
                 durable: false
