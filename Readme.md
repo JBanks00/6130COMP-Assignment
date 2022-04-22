@@ -51,5 +51,10 @@ This should fetch the data that resides within this table, finally as part of th
 To exit from this container terminal use <b>Ctrl+C</b>, which will take you back to the main solution terminal.
 
 <h2>Leader Election:</h2>
+In its current state the solution will elect a leader node based upon the highest randomly generated value that each node has.
+
+<br>The image below shows a localmongo node being elected as a leader, by changing its state form SECONDARY to PRIMARY. It does this by comparing a randomly generated number, that has been generated for each localmongo node, with the other nodes. In the case of the screenshot below this number is <b>"10"</B>, which is bigger than the other two nodes numbers and therefore allowing the node to become the PRIMARY/leader node.
+<img src="https://user-images.githubusercontent.com/46931166/164703121-401f27b9-ef2a-4608-97c9-a558a3a1cf7d.png">
+To find this in the live demo you may need to scroll up past any rabbitmq messages, the output that will show the lead will begin with either <b>localmongo1, localmonogo2 or localmongo3.</b> It will show a message similar to the screenshot, however the random number may be different which means the leader node will also be different.
 
 <h2>Stopping the Solution:</h2>
