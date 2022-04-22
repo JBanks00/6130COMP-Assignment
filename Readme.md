@@ -1,7 +1,5 @@
 <h1>Joe Banks Assignment</h1>
-This is the repository for the 6130COMP Assignment, included are the steps to run the current version of cloud application and the requirements of NotFLIX Ltd that have been met.
-
-<br>
+<p>This is the repository for the 6130COMP Assignment, included are the steps to run the current version of cloud application and the requirements of NotFLIX Ltd that have been met.</p>
 
 <b>Starting the Solution:</b>
 
