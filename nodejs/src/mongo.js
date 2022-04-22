@@ -65,8 +65,11 @@ amqp.connect('amqp://test:test@6130comp-assignment_haproxy_1', function(error0, 
                 durable: false
         });
         
+        var newMessage = JSON.parse(msg.content.toString());
+
         channel.publish(exchange, '', Buffer.from(msg));
         console.log(" [x] Sent %s", msg);
+        console.log(newMessage);
      });
 
            
